@@ -1,0 +1,10 @@
+---
+- name: Join host to the domain with automatic reboot
+  microsoft.ad.membership:
+    dns_domain_name: "{{ domain_name}}.{{ domain_tld }}"
+    hostname: "{{ hostname }}"
+    domain_admin_user: "{{ domain_admin_username }}"
+    domain_admin_password: "{{ domain_password }}"
+    state: domain
+    reboot: true
+...

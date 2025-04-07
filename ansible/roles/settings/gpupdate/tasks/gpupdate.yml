@@ -1,0 +1,8 @@
+---
+- name: Force group policy update
+  ansible.windows.win_command:
+    cmd: gpupdate /force
+
+- name: Reboot the machine
+  ansible.windows.win_reboot:
+...

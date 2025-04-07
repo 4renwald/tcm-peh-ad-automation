@@ -1,0 +1,20 @@
+---
+- name: Ensure the directory for the share is present
+  ansible.windows.win_file:
+    path: "{{ share.path }}"
+    state: directory
+  loop: "{{ shares }}"
+  loop_control:
+    loop_var: share
+
+- name: Create new SMB share
+  ansible.windows.win_share:
+    name: "{{ share.name }}"
+    path: "{{ share.path }}"
+    list: "{{ share.list }}"
+    full: "{{ share.full }}"
+    read: "{{ share.read }}"
+  loop: "{{ shares }}"
+  loop_control:
+    loop_var: share
+...

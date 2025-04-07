@@ -1,0 +1,28 @@
+---
+- name: Ensure GPO is present
+  ansible.windows.win_powershell:
+    script: |
+      try {
+        $existingGpo = Get-GPO -Name "{{ gpo.Name }}"
+        if ($null -eq $existingGpo) {
+            New-GPO -Name "{{ gpo.Name }}"
+            $keys = ConvertFrom-Json '{{ gpo["Keys"] | to_json }}'
+            foreach ($key in $keys) {
+              Set-GPRegistryValue -Name "{{ gpo.Name }}" -Key $key.KeyPath -ValueName $key.ValueName -Type $key.Type -Value $key.Value
+            }
+            New-GPLink -Name "{{ gpo.Name }}" -Target "dc={{ domain_name }},dc={{ domain_tld }}" -Enforced "{{ gpo.Enforced }}" -LinkEnabled "{{ gpo.LinkEnabled }}"
+            $Ansible = @{ Changed = $true }
+            $Ansible | ConvertTo-Json -Compress
+        } else {
+            $Ansible = @{ Changed = $false }
+            $Ansible | ConvertTo-Json -Compress
+            exit 0
+        }
+      } catch {
+        $Ansible = @{ Changed = $false; Failed = $true }
+        $Ansible | ConvertTo-Json -Compress
+      }
+  loop: "{{ gpo_list }}"
+  loop_control:
+    loop_var: gpo
+...

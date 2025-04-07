@@ -1,0 +1,12 @@
+---
+all:
+  vars:
+    ansible_connection: psrp
+    ansible_psrp_auth: credssp
+    ansible_psrp_cert_validation: ignore
+  
+  hosts:
+    HYDRA-DC:
+    THEPUNISHER:
+    SPIDERMAN:
+...

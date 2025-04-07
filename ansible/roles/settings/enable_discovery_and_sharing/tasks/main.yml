@@ -1,0 +1,13 @@
+---
+- name: Network Discovery and File Sharing block
+  block:
+    - name: Include Network Discovery and File Sharing task
+      ansible.builtin.include_tasks: enable_discovery_and_sharing.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

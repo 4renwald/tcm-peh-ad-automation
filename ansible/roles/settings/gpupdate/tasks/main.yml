@@ -1,0 +1,13 @@
+---
+- name: GPupdate block
+  block:
+    - name: Include gpupdate task
+      ansible.builtin.include_tasks: gpupdate.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

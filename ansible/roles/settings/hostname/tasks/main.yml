@@ -1,0 +1,13 @@
+---
+- name: Hostname block
+  block:
+    - name: Include hostname task
+      ansible.builtin.include_tasks: hostname.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

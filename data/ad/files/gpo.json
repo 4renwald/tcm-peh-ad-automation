@@ -1,0 +1,15 @@
+[
+    {
+        "Name": "Disable Windows Defender",
+        "Enforced": "Yes",
+        "LinkEnabled": "Yes",
+        "Keys": [
+            {
+                "KeyPath": "HKLM\\Software\\Policies\\Microsoft\\Windows Defender",
+                "ValueName": "DisableAntiSpyware",
+                "Type": "DWord",
+                "Value": 1
+            }
+        ]
+    }
+]

@@ -1,0 +1,23 @@
+---
+- name: Get objectGUID for specified group using its name
+  microsoft.ad.object_info:
+    identity: "CN={{ group_name }},CN=Users,DC={{ domain_name }},DC={{ domain_tld }}"
+    properties:
+      - objectGUID
+  loop: "{{ builtin_groups_names }}"
+  loop_control:
+    loop_var: group_name
+  register: builtin_groups
+
+- name: Move the builtin groups to the Groups OU
+  microsoft.ad.object:
+    identity: "{{ group.objects[0].ObjectGUID}}"
+    name: '{{ group.objects[0].Name }}'
+    path: "OU=Groups,DC={{ domain_name }},DC={{ domain_tld }}"
+    type: group
+    state: present
+  loop: "{{ builtin_groups.results }}"
+  loop_control:
+    loop_var: group
+  when: group.objects is defined and group.objects | length > 0
+...

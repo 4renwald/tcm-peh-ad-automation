@@ -1,0 +1,14 @@
+---
+- name: Ensure user accounts are created
+  microsoft.ad.user:
+    identity: "{{ user.identity }}"
+    password: "{{ user.password }}"
+    state: "{{ user.state }}"
+    path: "{{ user.path }},DC={{ domain_name }},DC={{ domain_tld }}"
+    groups:
+      set: "{{ user.groups }}"
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+  no_log: true
+...

@@ -1,0 +1,17 @@
+---
+- name: Mapped drive block
+  block:
+    - name: Include mapped drives task
+      ansible.builtin.include_tasks: mapped_drives.yml
+      loop: "{{ drives_list }}"
+      loop_control:
+        loop_var: drive
+      no_log: true
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

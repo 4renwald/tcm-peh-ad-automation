@@ -1,0 +1,11 @@
+---
+- name: Create OUs from provided structure
+  microsoft.ad.ou:
+    name: "{{ ou.name }}"
+    description: "{{ ou.description }}"
+    protect_from_deletion: "{{ ou.protect_from_deletion }}"
+    path: "{{ ou.path }}"
+  loop: "{{ ou_structure }}"
+  loop_control:
+    loop_var: ou
+...
