@@ -1,0 +1,39 @@
+[
+    {
+        "Name": "Disable Windows Defender",
+        "Enforced": "Yes",
+        "LinkEnabled": "Yes",
+        "Keys": [
+            {
+                "KeyPath": "HKLM\\Software\\Policies\\Microsoft\\Windows Defender",
+                "ValueName": "DisableAntiSpyware",
+                "Type": "DWord",
+                "Value": 1
+            },
+            {
+                "KeyPath": "HKLM\\Software\\Microsoft\\Windows Defender\\Features",
+                "ValueName": "TamperProtection",
+                "Type": "DWord",
+                "Value": 4
+            },
+            {
+                "KeyPath": "HKLM\\Software\\Policies\\Microsoft\\Windows Defender",
+                "ValueName": "ServiceKeepAlive",
+                "Type": "DWord",
+                "Value": 0
+            },
+            {
+                "KeyPath": "HKLM\\Software\\Policies\\Microsoft\\Windows Defender",
+                "ValueName": "AllowFastServiceStartup",
+                "Type": "DWord",
+                "Value": 0
+            },
+            {
+                "KeyPath": "HKLM\\Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection",
+                "ValueName": "DisableRealtimeMonitoring",
+                "Type": "DWord",
+                "Value": 1
+            }
+        ]
+    }
+]

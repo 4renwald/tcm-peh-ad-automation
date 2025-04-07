@@ -1,0 +1,13 @@
+---
+- name: Enable dark theme block
+  block:
+    - name: Include dark theme task
+      ansible.builtin.include_tasks: dark_theme.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

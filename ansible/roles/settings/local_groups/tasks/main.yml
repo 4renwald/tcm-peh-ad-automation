@@ -1,0 +1,14 @@
+---
+- name: Local machine groups block
+  block:
+    - name: Include local groups configuration task
+      ansible.builtin.include_tasks: local_groups.yml
+      when: local_groups_list is defined
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

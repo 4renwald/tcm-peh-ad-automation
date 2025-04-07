@@ -1,0 +1,12 @@
+---
+- name: Change the hostname
+  win_hostname:
+    name: "{{ hostname }}"
+  register: res
+
+- name: Reboot
+  win_reboot:
+    reboot_timeout: 300
+    post_reboot_delay: 30
+  when: res.reboot_required
+...

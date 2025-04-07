@@ -1,0 +1,43 @@
+[
+    {
+        "identity": "tstark",
+        "password": "Password123!",
+        "state": "present",
+        "fistname": "Tony",
+        "surname": "Stark",
+        "path": "CN=Users",
+        "password_never_expires": true,
+        "groups": [
+            "Administrators",
+            "Domain Admins",
+            "Domain Users",
+            "Enterprise Admins",
+            "Group Policy Creator Owners",
+            "Schema Admins"
+        ]
+    },
+    {
+        "identity": "fcastle",
+        "password": "Password1",
+        "state": "present",
+        "fistname": "Frank",
+        "surname": "Castle",
+        "path": "CN=Users",
+        "password_never_expires": true,
+        "groups": [
+            "Domain Users"
+        ]
+    },
+    {
+        "identity": "pparker",
+        "password": "Password2",
+        "state": "present",
+        "fistname": "Peter",
+        "surname": "Parker",
+        "path": "CN=Users",
+        "password_never_expires": true,
+        "groups": [
+            "Domain Users"
+        ]
+    }
+]

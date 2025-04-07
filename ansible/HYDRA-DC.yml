@@ -1,0 +1,45 @@
+---
+- name: HDYRA-DC playbook
+  hosts: HYDRA-DC
+  gather_facts: false
+  tasks:
+
+  - name: Configure hostname settings
+    include_role:
+      name: settings/hostname
+
+  - name: Configure network interface settings
+    include_role:
+      name: settings/network-interface
+
+  - name: Enable Network Discovery and File Sharing
+    include_role:
+      name: settings/enable_discovery_and_sharing
+
+  - name: Enable Dark Theme
+    include_role:
+      name: settings/dark_theme
+
+  - name: Disable Screen Saver
+    include_role:
+      name: settings/disable_sleep
+  
+  - name: Set up domain controller
+    include_role:
+      name: domain_controller
+    
+  - name: Deploy ADCS
+    include_role:
+      name: adcs
+
+  - name: Configure AD
+    include_role:
+      name: ad
+    vars:
+      ou_structure: "{{ lookup('template', playbook_dir + '/../data/ad/templates/ou_structure.j2') }}"
+      builtin_groups_names: "{{ lookup('file', playbook_dir + '/../data/ad/files/builtin_groups.json') }}"
+      users: "{{ lookup('file', playbook_dir + '/../data/ad/files/users.json') }}"
+      service_accounts: "{{ lookup('template', playbook_dir + '/../data/ad/templates/service_accounts.j2') }}"
+      gpo_list: "{{ lookup('file', playbook_dir + '/../data/ad/files/gpo.json') }}"
+      shares: "{{ lookup('file', playbook_dir + '/../data/ad/files/shares.json') }}"
+...

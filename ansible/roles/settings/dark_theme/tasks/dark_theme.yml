@@ -1,0 +1,28 @@
+- name: Configure Windows Theme to use Dark Theme (disable Light Theme)
+  ansible.windows.win_powershell:
+    script: |
+      try {
+          $regPath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
+          
+          if (-not (Test-Path $regPath)) {
+              New-Item -Path $regPath -Force | Out-Null
+          }
+          
+          $appsUseLight = (Get-ItemProperty -Path $regPath -Name "AppsUseLightTheme" -ErrorAction SilentlyContinue).AppsUseLightTheme
+          if ($appsUseLight -ne 0) {
+              Set-ItemProperty -Path $regPath -Name "AppsUseLightTheme" -Value 0 -Type DWord
+          }
+          
+          $systemUsesLight = (Get-ItemProperty -Path $regPath -Name "SystemUsesLightTheme" -ErrorAction SilentlyContinue).SystemUsesLightTheme
+          if ($systemUsesLight -ne 0) {
+              Set-ItemProperty -Path $regPath -Name "SystemUsesLightTheme" -Value 0 -Type DWord
+          }
+          
+          $Ansible = @{ Changed = $true }
+          $Ansible | ConvertTo-Json -Compress
+      }
+      catch {
+          $Ansible = @{ Changed = $false; Failed = $true }
+          $Ansible | ConvertTo-Json -Compress
+      }
+...

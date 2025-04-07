@@ -1,0 +1,11 @@
+---
+- name: Ensure user is part of target local group
+  ansible.windows.win_group_membership:
+    name: "{{ group.name }}"
+    members:
+      - "{{ group.members }}"
+    state: present
+  loop: "{{ local_groups_list }}"
+  loop_control:
+    loop_var: group
+...

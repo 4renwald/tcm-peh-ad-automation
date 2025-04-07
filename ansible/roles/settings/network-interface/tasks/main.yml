@@ -1,0 +1,13 @@
+---
+- name: Network Interface block
+  block:
+    - name: Include Set Static IP task
+      ansible.builtin.include_tasks: set-static-ip.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

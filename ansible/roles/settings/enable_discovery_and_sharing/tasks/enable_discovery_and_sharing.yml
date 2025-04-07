@@ -1,0 +1,50 @@
+---
+- name: Enable network discovery and file sharing if needed
+  ansible.windows.win_powershell:
+    script: |
+        try {
+            $ErrorActionPreference = "Stop"
+            $services = @("fdPHost", "FDResPub", "SSDPSRV", "upnphost")
+            $changeNeeded = $false
+
+           foreach ($svc in $services) {
+                $service = Get-Service -Name $svc
+                if ($service.StartType -ne "Automatic" -or $service.Status -ne "Running") {
+                    $changeNeeded = $true
+                    break
+                }
+            }
+
+            $netDiscRules = Get-NetFirewallRule -DisplayGroup "Network Discovery"
+            if ($netDiscRules | Where-Object { $_.Enabled -ne "True" }) {
+                $changeNeeded = $true
+            }
+
+            $fpSharingRules = Get-NetFirewallRule -DisplayGroup "File and Printer Sharing"
+            if ($fpSharingRules | Where-Object { $_.Enabled -ne "True" }) {
+                $changeNeeded = $true
+            }
+
+            if (-not $changeNeeded) {
+                $Ansible = @{ Changed = $false }
+                $Ansible | ConvertTo-Json -Compress
+                exit
+            }
+
+            foreach ($svc in $services) {
+                Set-Service -Name $svc -StartupType Automatic
+                if ((Get-Service -Name $svc).Status -ne "Running") {
+                    Start-Service -Name $svc
+                }
+            }
+            Enable-NetFirewallRule -DisplayGroup "Network Discovery"
+            Enable-NetFirewallRule -DisplayGroup "File and Printer Sharing"
+
+            $Ansible = @{ Changed = $true }
+            $Ansible | ConvertTo-Json -Compress
+        } catch {
+            $Ansible = @{ Changed = $false; Failed = $true }
+            $Ansible | ConvertTo-Json -Compress
+        }
+    error_action: stop
+...

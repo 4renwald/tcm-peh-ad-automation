@@ -1,0 +1,49 @@
+---
+- name: Verify network interface configuration
+  ansible.windows.win_powershell:
+    script: |
+      try {
+        $IP = Get-NetIPAddress | Where-Object { $_.AddressFamily -eq "IPv4" -and $_.IPAddress -ne "127.0.0.1" }
+        $Interface = Get-NetIPInterface -InterfaceIndex $IP.InterfaceIndex -ErrorAction Stop
+        if ($Interface.Dhcp -eq "Disabled") {
+          $Ansible = @{ Changed = $false; Failed = $false }
+        } else {
+          $Ansible = @{ Changed = $true; Failed = $false }
+        }
+      } catch {
+        $Ansible = @{ Changed = $false; Failed = $true }
+      }
+      $Ansible | ConvertTo-Json -Compress
+  register: static_ip_status
+
+- name: Display Warning
+  set_fact:
+    _warning: "{{ 'The next task will disconnect Ansible and fail. This is expected.' | warn_me }}"
+  when: (static_ip_status.output[0] | from_json).Changed == true
+
+- name: Ensure the network interface is configured with a static IP address
+  ansible.windows.win_powershell:
+    script: |
+      try {
+        $Gateway = (Get-NetRoute -DestinationPrefix '0.0.0.0/0' | Sort-Object -Property RouteMetric | Select-Object -First 1).NextHop
+        $IP = Get-NetIPAddress | Where-Object { $_.AddressFamily -eq "IPv4" -and $_.IPAddress -ne "127.0.0.1" }
+        Set-NetIPInterface -InterfaceIndex $IP.InterfaceIndex -Dhcp Disabled -ErrorAction Stop
+        New-NetIPAddress -InterfaceIndex $IP.InterfaceIndex -IPAddress $IP.IPAddress -PrefixLength $IP.PrefixLength -DefaultGateway $Gateway -ErrorAction Stop
+        Set-DnsClientServerAddress -InterfaceIndex $IP.InterfaceIndex -ServerAddresses "{{ domain_dns_ip }}" -ErrorAction Stop
+        $Ansible = @{ Changed = $true; Failed = $false }
+      } catch {
+        $Ansible = @{ Changed = $false; Failed = $true }
+      }
+      $Ansible | ConvertTo-Json -Compress
+  register: static_ip_result
+  when: (static_ip_status.output[0] | from_json).Changed == true
+  ignore_errors: true
+
+
+- name: Wait for the host to become reachable over WinRM
+  ansible.windows.win_wait_for:
+    port: 5986
+    delay: 10
+    timeout: 120
+  when: static_ip_result is defined and (static_ip_result.failed | default(false)) == true
+...

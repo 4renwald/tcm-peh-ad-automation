@@ -1,0 +1,34 @@
+---
+- name: AD block
+  block:
+    - name: Include OU task
+      ansible.builtin.include_tasks: ou.yml
+      when: ou_structure is defined
+
+    - name: Include Move Builtin Groups task
+      ansible.builtin.include_tasks: move_builtin_groups.yml
+      when: builtin_groups_names is defined
+
+    - name: Include AD Users task
+      ansible.builtin.include_tasks: users.yml
+      when: users is defined
+    
+    - name: Include AD Service Accounts task
+      ansible.builtin.include_tasks: service_accounts.yml
+      when: service_accounts is defined
+
+    - name: Include Shares task
+      ansible.builtin.include_tasks: shares.yml
+      when: shares is defined
+
+    - name: Include GPO task
+      ansible.builtin.include_tasks: gpo.yml
+      when: gpo_list is defined
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

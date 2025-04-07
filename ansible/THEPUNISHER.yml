@@ -1,0 +1,48 @@
+---
+- name: THEPUNISHER playbook
+  hosts: THEPUNISHER
+  gather_facts: false
+  tasks:
+
+  - name: Configure hostname settings
+    include_role:
+      name: settings/hostname
+
+  - name: Configure network interface settings
+    include_role:
+      name: settings/network-interface
+  
+  - name: Ensure SMB signing is disabled
+    include_role:
+      name: settings/disable_smb_signing
+  
+  - name: Join the target domain
+    include_role:
+      name: domain_join
+
+  - name: Configure Local Administrator account
+    include_role:
+      name: settings/local_administrator
+
+  - name: Configure Local Groups
+    include_role:
+      name: settings/local_groups
+    vars:
+      local_groups_list: "{{ lookup('file', playbook_dir + '/../data/local_groups/files/THEPUNISHER.json') }}"
+
+  - name: Enable Network Discovery and File Sharing
+    include_role:
+      name: settings/enable_discovery_and_sharing
+
+  - name: Enable Dark Theme
+    include_role:
+      name: settings/dark_theme
+
+  - name: Disable Sleep
+    include_role:
+      name: settings/disable_screen_saver
+  
+  - name: Force a Group Policy Update with reboot
+    include_role:
+      name: settings/gpupdate
+...

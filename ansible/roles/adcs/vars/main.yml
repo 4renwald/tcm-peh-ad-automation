@@ -1,0 +1,4 @@
+---
+domain_name: "{{ target_domain_name.split('.')[0] }}"
+domain_tld: "{{ target_domain_name.split('.')[1] }}"
+...

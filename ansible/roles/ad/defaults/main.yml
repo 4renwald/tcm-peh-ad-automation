@@ -1,0 +1,4 @@
+---
+domain_username: "{{ domain_admin_username }}"
+domain_password: "{{ domain_admin_password }}"
+...

@@ -1,0 +1,26 @@
+---
+- name: Ensure RSAT DFS Management Console is installed
+  ansible.windows.win_feature:
+    name: RSAT-DFS-Mgmt-Con
+    state: present
+    include_sub_features: true
+    include_management_tools: true
+  register: rsat_install_dfs
+
+- name: Generate random DSRM password
+  set_fact:
+    dsrm_password: "{{ lookup('community.general.random_string', length=16, min_lower=1, min_upper=1, min_numeric=1, min_special=1, override_special='-_=+!#$()[]') }}"
+
+- name: Create new Windows domain in a new forest with specific parameters
+  microsoft.ad.domain:
+    create_dns_delegation: false
+    database_path: C:\Windows\NTDS
+    dns_domain_name: "{{ domain_name }}.{{ domain_tld }}"
+    install_dns: true
+    domain_mode: WinThreshold
+    domain_netbios_name: "{{ domain_name | upper }}"
+    forest_mode: WinThreshold
+    safe_mode_password: "{{ dsrm_password }}"
+    sysvol_path: C:\Windows\SYSVOL
+    reboot: true
+...

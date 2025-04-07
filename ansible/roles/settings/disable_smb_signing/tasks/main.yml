@@ -1,0 +1,13 @@
+---
+- name: Disable SMB Signing block
+  block:
+    - name: Include disable smb signing task
+      ansible.builtin.include_tasks: disable_smb_signing.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

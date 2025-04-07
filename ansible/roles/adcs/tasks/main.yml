@@ -1,0 +1,16 @@
+---
+- name: AD CS block
+  block:
+    - name: Include install task
+      ansible.builtin.include_tasks: install.yml
+
+    - name: Include configure task
+      ansible.builtin.include_tasks: configure.yml
+
+  rescue:
+    - name: Fail block on error
+      ansible.builtin.fail:
+        msg:
+          - "Failed task: {{ ansible_failed_task.name }}"
+          - "Error: {{ ansible_failed_result.msg | default('No error message available') }}"
+...

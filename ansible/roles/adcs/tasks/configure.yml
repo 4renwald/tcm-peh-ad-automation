@@ -1,0 +1,28 @@
+---
+- name: Install AD CS Certification Authority
+  ansible.windows.win_powershell:
+    script: |
+      try {
+        $ca = Get-Service -Name CertSvc -ErrorAction SilentlyContinue
+        if ($ca -and $ca.Status -eq 'Running') {
+          $Ansible = @{ Changed = $false }
+          $Ansible | ConvertTo-Json -Compress
+          exit
+        }
+        $params = @{
+          CAType              = "EnterpriseRootCA"
+          CryptoProviderName  = "RSA#Microsoft Software Key Storage Provider"
+          KeyLength           = 2048
+          HashAlgorithmName   = "SHA256"
+          ValidityPeriod      = "Years"
+          ValidityPeriodUnits = 5
+        }
+        Install-AdcsCertificationAuthority @params -Force
+        $Ansible = @{ Changed = $true }
+        $Ansible | ConvertTo-Json -Compress
+      } catch {
+        $Ansible = @{ Changed = $false; Failed = $true }
+        $Ansible | ConvertTo-Json -Compress
+      }
+    error_action: stop
+...

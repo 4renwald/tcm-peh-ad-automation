@@ -1,0 +1,15 @@
+---
+all:
+  vars:
+    ansible_connection: psrp
+    ansible_psrp_auth: credssp
+    ansible_psrp_cert_validation: ignore
+    ansible_psrp_protocol: https
+    ansible_psrp_reconnection_retries: 1
+    ansible_psrp_read_timeout: 60
+  
+  hosts:
+    HYDRA-DC:
+    THEPUNISHER:
+    SPIDERMAN:
+...
