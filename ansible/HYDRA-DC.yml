@@ -11,6 +11,10 @@
   - name: Configure network interface settings
     include_role:
       name: settings/network-interface
+
+  - name: Enable Network Discovery and File Sharing
+    include_role:
+      name: settings/enable_discovery_and_sharing
   
   - name: Set up domain controller
     include_role:
