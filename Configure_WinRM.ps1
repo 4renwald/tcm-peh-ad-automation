@@ -93,6 +93,17 @@ function New-FirewallRule {
     }
 }
 
+function Clear-WinRMServiceCertificateThumbprint {
+    try {
+        Write-Host -ForegroundColor Green "Clearing CertificateThumbprint from WinRM service configuration..."
+        winrm set winrm/config/service '@{CertificateThumbprint=""}'
+        Write-Host -ForegroundColor Green "CertificateThumbprint cleared from WinRM service configuration successfully."
+    }
+    catch {
+        Write-Host -ForegroundColor Green "Error clearing CertificateThumbprint from WinRM service: $_"
+    }
+}
+
 Set-PSRemotingCredSSP
 
 $cert = New-SelfSignedCert
@@ -103,3 +114,5 @@ if ($null -ne $cert) {
 }
 
 New-FirewallRule
+
+Clear-WinRMServiceCertificateThumbprint

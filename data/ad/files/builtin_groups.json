@@ -18,5 +18,7 @@
   "Protected Users",
   "RAS and IAS Servers",
   "Read-only Domain Controllers",
-  "Schema Admins"
+  "Schema Admins",
+  "Forest Trust Accounts",
+  "External Trust Accounts"
 ]

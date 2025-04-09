@@ -16,7 +16,7 @@
       $Ansible | ConvertTo-Json -Compress
   register: static_ip_status
 
-- name: Set warning fact (to trigger the warning only)
+- name: Display Warning
   set_fact:
     _warning: "{{ 'The next task will disconnect Ansible and fail. This is expected.' | warn_me }}"
   when: (static_ip_status.output[0] | from_json).Changed == true

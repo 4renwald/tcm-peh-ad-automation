@@ -13,19 +13,19 @@ error_handling() {
 
 # Functions for output format
 function print_success () {
-    echo -e "\x1B[01;32m[+]\x1B[0m $1"
+    echo -e "\x1B[01;32m[+] $1\x1B[0m"
 }
 
 function print_error () {
-    echo -e "\x1B[01;31m[!]\x1B[0m $1"
+    echo -e "\x1B[01;31m[!] $1\x1B[0m"
 }
 
 function print_warning () {
-    echo -e "\x1B[01;33m[-]\x1B[0m $1"
+    echo -e "\x1B[01;33m[-] $1\x1B[0m"
 }
 
 function print_info () {
-    echo -e "\x1B[01;34m[*]\x1B[0m $1"
+    echo -e "\x1B[01;34m[*] $1\x1B[0m"
 }
 
 # Source the IP address configuration file

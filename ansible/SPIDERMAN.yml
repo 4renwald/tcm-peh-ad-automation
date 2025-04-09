@@ -39,4 +39,8 @@
       name: settings/mapped_drives
     vars:
       drives_list: "{{ lookup('template', playbook_dir + '/../data/settings/mapped_drives/templates/drives.j2') }}"
+  
+  - name: Force a Group Policy Update with reboot
+    include_role:
+      name: settings/gpupdate
 ...

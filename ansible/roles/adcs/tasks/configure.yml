@@ -3,8 +3,8 @@
   ansible.windows.win_powershell:
     script: |
       try {
-        $ca = Get-WindowsFeature -Name ADCS-Cert-Authority
-        if ($ca -and $ca.Installed) {
+        $ca = Get-Service -Name CertSvc -ErrorAction SilentlyContinue
+        if ($ca -and $ca.Status -eq 'Running') {
           $Ansible = @{ Changed = $false }
           $Ansible | ConvertTo-Json -Compress
           exit

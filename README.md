@@ -27,17 +27,14 @@ Before running the automation, ensure you have the following:
 
 ### 2.1 Server (Domain Controller)
 
-- **OS**: [Windows Server 2022](https://software-static.download.prss.microsoft.com/sg/download/888969d5-f34g-4e03-ac9d-1f9786c66749/SERVER_EVAL_x64FRE_en-us.iso)  
+- **OS**: [Windows Server 2025](https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025?msockid=1dbd6c8bbd85672a1985788bbc2d66b4)  
 
 > [!IMPORTANT]  
 > Choose the **Standard Edition with Desktop Experience** during installation.
 
 ### 2.2 Workstations
 
-Choose one of the following for each workstation:
-
-- [Windows 10 Enterprise](https://www.microsoft.com/en-us/evalcenter/download-windows-10-enterprise)
-- [Windows 11 Enterprise](https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise)
+- **OS**: [Windows 11 Enterprise](https://www.microsoft.com/en-us/evalcenter/download-windows-11-enterprise)
 
 **Local Administrator Accounts:**
 

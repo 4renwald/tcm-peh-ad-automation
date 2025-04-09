@@ -33,4 +33,8 @@
   - name: Enable Network Discovery and File Sharing
     include_role:
       name: settings/enable_discovery_and_sharing
+  
+  - name: Force a Group Policy Update with reboot
+    include_role:
+      name: settings/gpupdate
 ...
