@@ -16,6 +16,10 @@
     include_role:
       name: settings/enable_discovery_and_sharing
 
+  - name: Ensure SMB signing is disabled
+    include_role:
+      name: settings/disable_smb_signing
+
   - name: Enable Dark Theme
     include_role:
       name: settings/dark_theme

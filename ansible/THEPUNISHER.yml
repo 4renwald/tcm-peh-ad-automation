@@ -40,7 +40,7 @@
 
   - name: Disable Sleep
     include_role:
-      name: settings/disable_screen_saver
+      name: settings/disable_sleep
   
   - name: Force a Group Policy Update with reboot
     include_role:
