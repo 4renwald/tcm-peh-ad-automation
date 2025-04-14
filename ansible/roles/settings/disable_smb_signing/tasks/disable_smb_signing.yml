@@ -3,17 +3,9 @@
   ansible.windows.win_powershell:
     script: |
       try {
-        $clientConfig = Get-SmbClientConfiguration
-        $serverConfig = Get-SmbServerConfiguration
-
-        if ($clientConfig.RequireSecuritySignature -or $serverConfig.RequireSecuritySignature) {
-          Set-SmbClientConfiguration -RequireSecuritySignature $false -Force
-          Set-SmbServerConfiguration -RequireSecuritySignature $false -Force
-          $Ansible = @{ Changed = $true }
-        }
-        else {
-          $Ansible = @{ Changed = $false }
-        }
+        Set-SmbClientConfiguration -RequireSecuritySignature $false -Force
+        Set-SmbServerConfiguration -RequireSecuritySignature $false -Force
+        $Ansible = @{ Changed = $true }
         $Ansible | ConvertTo-Json -Compress
       }
       catch {
