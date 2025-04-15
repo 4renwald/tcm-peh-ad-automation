@@ -1,12 +1,10 @@
 [
     {
         "credential_name": "mapped_drive_creds",
-        "username": "{{ domain_admin_username }}",
+        "username": "administrator",
         "password": "{{ domain_admin_password }}",
         "drive_letter": "Z",
         "server": "{{ target_domain_controller }}",
-        "share_name": "hackme",
-        "become_username": '{{ domain_name }}\pparker',
-        "become_password": "Password2"
+        "share_name": "hackme"
     }
 ]

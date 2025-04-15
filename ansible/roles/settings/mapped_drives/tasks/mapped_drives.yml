@@ -1,22 +1,31 @@
 ---
-- name: Create mapped drive with credentials and save the username and password
-  block:
-    - name: Save the network credentials required for the mapped drive
-      community.windows.win_credential:
-        name: "{{ drive.credential_name }}"
-        type: domain_password
-        username: "{{ drive.username }}"
-        secret: "{{ drive.password }}}"
-        state: present
+- name: Enable Linked Connections in registry
+  win_regedit:
+    path: HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+    name: EnableLinkedConnections
+    data: 1
+    type: dword
 
-    - name: Create a mapped drive that requires authentication
-      community.windows.win_mapped_drive:
-        letter: "{{ drive.drive_letter }}"
-        path: '\\{{ drive.server }}\{{ drive.share_name }}'
-        state: present
+- name: Add credential and map drive
+  win_shell: |
+    cmdkey /add:{{ drive.server }}\{{ drive.share_name }} /user:{{ domain_name}}\{{ drive.username }} /pass:{{ drive.password }}
+  args:
+    executable: cmd
+  register: drive_map_results
   vars:
     ansible_become: true
     ansible_become_method: runas
-    ansible_become_user: '{{ drive.become_username }}'
-    ansible_become_pass: '{{ drive.become_password }}'
+    ansible_become_user: '{{ ansible_user }}'
+    ansible_become_pass: '{{ ansible_password }}'
+
+- name: Map drive
+  win_shell: |
+    net use {{ drive.drive_letter }}: \\{{ drive.server }}\{{ drive.share_name }} /persistent:yes
+  args:
+    executable: cmd
+  vars:
+    ansible_become: true
+    ansible_become_method: runas
+    ansible_become_user: '{{ ansible_user }}'
+    ansible_become_pass: '{{ ansible_password }}'
 ...
