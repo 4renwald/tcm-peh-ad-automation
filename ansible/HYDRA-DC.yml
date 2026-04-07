@@ -40,10 +40,10 @@
     include_role:
       name: ad
     vars:
-      ou_structure: "{{ lookup('template', playbook_dir + '/../data/ad/templates/ou_structure.j2') }}"
-      builtin_groups_names: "{{ lookup('file', playbook_dir + '/../data/ad/files/builtin_groups.json') }}"
-      users: "{{ lookup('file', playbook_dir + '/../data/ad/files/users.json') }}"
-      service_accounts: "{{ lookup('template', playbook_dir + '/../data/ad/templates/service_accounts.j2') }}"
-      gpo_list: "{{ lookup('file', playbook_dir + '/../data/ad/files/gpo.json') }}"
-      shares: "{{ lookup('file', playbook_dir + '/../data/ad/files/shares.json') }}"
+      ou_structure: "{{ lookup('template', playbook_dir + '/../data/ad/templates/ou_structure.j2') | from_json }}"
+      builtin_groups_names: "{{ lookup('file', playbook_dir + '/../data/ad/files/builtin_groups.json') | from_json }}"
+      users: "{{ lookup('file', playbook_dir + '/../data/ad/files/users.json') | from_json }}"
+      service_accounts: "{{ lookup('template', playbook_dir + '/../data/ad/templates/service_accounts.j2') | from_json }}"
+      gpo_list: "{{ lookup('file', playbook_dir + '/../data/ad/files/gpo.json') | from_json }}"
+      shares: "{{ lookup('file', playbook_dir + '/../data/ad/files/shares.json') | from_json }}"
 ...
