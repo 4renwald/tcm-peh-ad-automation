@@ -28,7 +28,7 @@
     include_role:
       name: settings/local_groups
     vars:
-      local_groups_list: "{{ lookup('file', playbook_dir + '/../data/local_groups/files/THEPUNISHER.json') }}"
+      local_groups_list: "{{ lookup('file', playbook_dir + '/../data/local_groups/files/THEPUNISHER.json') | from_json }}"
 
   - name: Enable Network Discovery and File Sharing
     include_role:
