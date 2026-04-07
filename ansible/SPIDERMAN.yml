@@ -28,7 +28,7 @@
     include_role:
       name: settings/local_groups
     vars:
-      local_groups_list: "{{ lookup('file', playbook_dir + '/../data/local_groups/files/SPIDERMAN.json') }}"
+      local_groups_list: "{{ lookup('file', playbook_dir + '/../data/local_groups/files/SPIDERMAN.json') | from_json }}"
 
   - name: Enable Network Discovery and File Sharing
     include_role:
@@ -38,7 +38,7 @@
     include_role:
       name: settings/mapped_drives
     vars:
-      drives_list: "{{ lookup('template', playbook_dir + '/../data/settings/mapped_drives/templates/drives.j2') }}"
+      drives_list: "{{ lookup('template', playbook_dir + '/../data/settings/mapped_drives/templates/drives.j2') | from_json }}"
 
   - name: Enable Dark Theme
     include_role:
